@@ -1,0 +1,10 @@
+# OSX
+**/.DS_Store
+
+# VS code
+**/.vs/
+**/.vscode/
+
+# build output
+**/bin
+**/obj
