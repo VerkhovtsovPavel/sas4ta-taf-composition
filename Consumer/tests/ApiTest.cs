@@ -10,15 +10,20 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Consumer;
 using PactNet.Matchers;
+using Allure.Commons;
+using Allure.Xunit;
+using Allure.Xunit.Attributes;
 
 namespace tests
 {
+    [AllureSuite("Consumer Tests")]
     public class ApiTest
     {
         private IPactBuilderV3 pact;
         private readonly ApiClient ApiClient;
         private readonly int port = 9000;
         private readonly List<object> products;
+        private readonly IMatcher tokenRegex = Match.Regex("Bearer 2022-04-24T11:34:18.045Z", "Bearer \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z");
 
         public ApiTest(ITestOutputHelper output)
         {
@@ -43,14 +48,14 @@ namespace tests
             ApiClient = new ApiClient(new System.Uri($"http://localhost:{port}"));
         }
 
-        [Fact]
+        [AllureXunit(DisplayName = "Get all products")]
         public async void GetAllProducts()
         {
             // Arange
             pact.UponReceiving("A valid request for all products")
                     .Given("products exist")
                     .WithRequest(HttpMethod.Get, "/api/products")
-                    .WithHeader("Authorization", Match.Regex("Bearer 2019-01-14T11:34:18.045Z", "Bearer \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z"))
+                    .WithHeader("Authorization", tokenRegex)
                 .WillRespond()
                     .WithStatus(HttpStatusCode.OK)
                     .WithHeader("Content-Type", "application/json; charset=utf-8")
@@ -62,14 +67,14 @@ namespace tests
             });
         }
 
-        [Fact]
+        [AllureXunit(DisplayName = "Get product")]
         public async void GetProduct()
         {
             // Arange
             pact.UponReceiving("A valid request for a product")
                     .Given("product with ID 10 exists")
                     .WithRequest(HttpMethod.Get, "/api/products/10")
-                    .WithHeader("Authorization", Match.Regex("Bearer 2019-01-14T11:34:18.045Z", "Bearer \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z"))
+                    .WithHeader("Authorization", tokenRegex)
                 .WillRespond()
                     .WithStatus(HttpStatusCode.OK)
                     .WithHeader("Content-Type", "application/json; charset=utf-8")
@@ -81,14 +86,14 @@ namespace tests
             });
         }
 
-        [Fact]
+        [AllureXunit(DisplayName = "No products exists")]
         public async void NoProductsExist()
         {
             // Arange
             pact.UponReceiving("A valid request for all products")
                     .Given("no products exist")
                     .WithRequest(HttpMethod.Get, "/api/products")
-                    .WithHeader("Authorization", Match.Regex("Bearer 2019-01-14T11:34:18.045Z", "Bearer \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z"))
+                    .WithHeader("Authorization", tokenRegex)
                 .WillRespond()
                     .WithStatus(HttpStatusCode.OK)
                     .WithHeader("Content-Type", "application/json; charset=utf-8")
@@ -100,14 +105,14 @@ namespace tests
             });
         }
 
-        [Fact]
+        [AllureXunit(DisplayName = "Product does not exist")]
         public async void ProductDoesNotExist()
         {
             // Arange
             pact.UponReceiving("A valid request for a product")
                     .Given("product with ID 11 does not exist")
                     .WithRequest(HttpMethod.Get, "/api/products/11")
-                    .WithHeader("Authorization", Match.Regex("Bearer 2019-01-14T11:34:18.045Z", "Bearer \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z"))
+                    .WithHeader("Authorization", tokenRegex)
                 .WillRespond()
                     .WithStatus(HttpStatusCode.NotFound);
 
@@ -117,7 +122,7 @@ namespace tests
             });
         }
 
-        [Fact]
+        [AllureXunit(DisplayName = "Get product with missing auth header")]
         public async void GetProductMissingAuthHeader()
         {
             // Arange

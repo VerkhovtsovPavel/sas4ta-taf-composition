@@ -20,6 +20,7 @@
  * XUnit
  * ASP.NET Core Web API
  * Pact .NET Core v3
+ * Allure .Net
 
 ##
 

@@ -27,8 +27,8 @@ namespace tests.Middleware
                 { "products exist", ProductsExist},
                 { "no products exist", NoProductsExist },
                 { "product with ID 10 exists", Product10Exists },
-                { "no auth token is provided", NoAuthTokenIsProvided },
-                { "product with ID 11 does not exist", Product11DoesNotExist }
+                { "no auth token is provided", NoProductsExist },
+                { "product with ID 11 does not exist", NoProductsExist }
             };
         }
 
@@ -46,16 +46,6 @@ namespace tests.Middleware
         private void NoProductsExist()
         {
             _repository.SetState(new List<Product>());
-        }
-
-        private void Product11DoesNotExist()
-        {
-            ProductsExist();
-        }
-
-        private void NoAuthTokenIsProvided()
-        {
-            ProductsExist();
         }
 
         private void Product10Exists()

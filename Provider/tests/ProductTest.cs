@@ -9,9 +9,13 @@ using PactNet.Native;
 using tests.XUnitHelpers;
 using Xunit;
 using Xunit.Abstractions;
+using Allure.Commons;
+using Allure.Xunit;
+using Allure.Xunit.Attributes;
 
 namespace tests
 {
+    [AllureSuite("Provider Tests")]
     public class ProductTest
     {
         private string _pactServiceUri = "http://127.0.0.1:9001";
@@ -22,7 +26,7 @@ namespace tests
             _outputHelper = output;
         }
 
-        [Fact]
+        [AllureXunit(DisplayName = "Ensure provider api honours pact with Consumer")]
         public void EnsureProviderApiHonoursPactWithConsumer()
         {
             // Arrange
